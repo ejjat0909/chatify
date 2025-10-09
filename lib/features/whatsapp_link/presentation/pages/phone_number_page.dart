@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 
+import '../cubit/app_version_cubit.dart';
+import '../cubit/app_version_state.dart';
 import '../cubit/phone_number_cubit.dart';
 import '../cubit/phone_number_state.dart';
 import '../widgets/glass_snackbar.dart';
@@ -16,12 +18,14 @@ class PhoneNumberPage extends StatefulWidget {
 
 class _PhoneNumberPageState extends State<PhoneNumberPage> {
   late final TextEditingController _controller;
-  String version = "";
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await context.read<AppVersionCubit>().loadVersion();
+    });
   }
 
   @override
@@ -473,7 +477,16 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text("Chatify v$version"),
+                        child: BlocBuilder<AppVersionCubit, AppVersionState>(
+                          builder: (context, state) {
+                            final display = switch (state.status) {
+                              AppVersionStatus.success => state.version,
+                              AppVersionStatus.failure => 'Unavailable',
+                              _ => '...',
+                            };
+                            return Text('Chatify v$display');
+                          },
+                        ),
                       ),
                     ],
                   ),

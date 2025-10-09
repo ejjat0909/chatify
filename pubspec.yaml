@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^8.1.4
   url_launcher: ^6.3.0
   glassmorphism: ^3.0.0
+  package_info_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:

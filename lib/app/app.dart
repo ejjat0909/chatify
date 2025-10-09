@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../features/whatsapp_link/domain/services/whatsapp_launcher.dart';
 import '../features/whatsapp_link/domain/usecases/normalize_malaysian_number.dart';
+import '../features/whatsapp_link/presentation/cubit/app_version_cubit.dart';
 import '../features/whatsapp_link/presentation/cubit/phone_number_cubit.dart';
 import '../features/whatsapp_link/presentation/pages/phone_number_page.dart';
 
@@ -18,11 +19,16 @@ class ChatifyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PhoneNumberCubit>(
-      create: (_) => PhoneNumberCubit(
-        normalize: normalizeMalaysianNumber,
-        launcher: whatsAppLauncher,
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PhoneNumberCubit>(
+          create: (_) => PhoneNumberCubit(
+            normalize: normalizeMalaysianNumber,
+            launcher: whatsAppLauncher,
+          ),
+        ),
+        BlocProvider<AppVersionCubit>(create: (_) => AppVersionCubit()),
+      ],
       child: MaterialApp(
         title: 'Chatify',
         debugShowCheckedModeBanner: false,
