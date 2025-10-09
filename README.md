@@ -5,14 +5,20 @@ A Flutter application that allows users to open WhatsApp with Malaysian phone nu
 ## Features
 
 - Accept Malaysian phone numbers in various formats:
-  - `0132961685`
-  - `60132961685`
-  - `+6013-296 1685`
-  - `013-296 1685`
-  - `013 296 1685`
+  - `0134567890`
+  - `601345678990`
+  - `+6013-4456 7890`
+  - `013-296 7890`
+  - `013 296 7890`
 - Validates and normalizes phone numbers
 - Opens WhatsApp with the formatted number (without `+` symbol)
 - Clean Architecture with BLoC state management
+
+## Screenshots
+
+![App Screenshot 1](screen_shot/Screenshot_1760015957.png)
+![App Screenshot 2](screen_shot/Screenshot_1760015976.png)
+![App Screenshot 3](screen_shot/Screenshot_1760015982.png)
 
 ## Architecture
 
@@ -117,6 +123,10 @@ dependencies:
    ```bash
    flutter analyze
    ```
+
+## Download APK
+
+You can download the latest APK from [here](apk/app-release.apk).
 
 ## How It Works
 
