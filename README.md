@@ -75,5 +75,3 @@ Built with:
 > “Because saving numbers just to chat is so 2010.”
 
 ---
-
-Would you like me to make a **Play Store / AppGallery description version** (with title, short description, and long description formatted for upload)?
