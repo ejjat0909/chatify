@@ -16,9 +16,7 @@ A Flutter application that allows users to open WhatsApp with Malaysian phone nu
 
 ## Screenshots
 
-![App Screenshot 1](screen_shot/Screenshot_1760015957.png)
-![App Screenshot 2](screen_shot/Screenshot_1760015976.png)
-![App Screenshot 3](screen_shot/Screenshot_1760015982.png)
+| ![App Screenshot 1](screen_shot/Screenshot_1760015957.png) | ![App Screenshot 2](screen_shot/Screenshot_1760015976.png) | ![App Screenshot 3](screen_shot/Screenshot_1760015982.png) |
 
 ## Architecture
 
