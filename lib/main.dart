@@ -5,7 +5,7 @@ import 'features/whatsapp_link/data/repositories/phone_number_repository_impl.da
 import 'features/whatsapp_link/domain/usecases/normalize_malaysian_number.dart';
 import 'features/whatsapp_link/infrastructure/whatsapp_launcher.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final repository = PhoneNumberRepositoryImpl();
