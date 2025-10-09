@@ -120,50 +120,124 @@ class _GlassSnackbarState extends State<_GlassSnackbar>
                   position: _slideAnimation,
                   child: FadeTransition(
                     opacity: _fadeAnimation,
-                    child: GlassmorphicContainer(
-                      width: double.infinity,
-                      height: 72,
-                      borderRadius: 18,
-                      blur: 25,
-                      border: 1.5,
-                      linearGradient: LinearGradient(
-                        colors: [
-                          Colors.white.withOpacity(0.32),
-                          Colors.white.withOpacity(0.08),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF37CFFF).withOpacity(0.35),
+                            blurRadius: 32,
+                            spreadRadius: 4,
+                            offset: const Offset(-8, 16),
+                          ),
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.28),
+                            blurRadius: 28,
+                            spreadRadius: 2,
+                            offset: const Offset(10, 18),
+                          ),
                         ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
                       ),
-                      borderGradient: LinearGradient(
-                        colors: [
-                          Colors.white.withOpacity(0.55),
-                          Colors.white.withOpacity(0.12),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.info_outline,
-                                color: colorScheme.primary,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  widget.message,
-                                  style: textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white.withOpacity(0.94),
+                      child: GlassmorphicContainer(
+                        width: double.infinity,
+                        height: 80,
+                        borderRadius: 24,
+                        blur: 28,
+                        border: 1.2,
+                        linearGradient: LinearGradient(
+                          colors: [
+                            Colors.white.withOpacity(0.6),
+                            const Color(0xFF74E7FF).withOpacity(0.18),
+                            Colors.white.withOpacity(0.05),
+                          ],
+                          stops: const [0, 0.55, 1],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderGradient: LinearGradient(
+                          colors: [
+                            Colors.white.withOpacity(0.8),
+                            Colors.white.withOpacity(0.18),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Positioned(
+                              top: -25,
+                              right: -20,
+                              child: Container(
+                                width: 88,
+                                height: 88,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(120),
+                                  gradient: RadialGradient(
+                                    colors: [
+                                      Colors.white.withOpacity(0.65),
+                                      Colors.white.withOpacity(0.08),
+                                    ],
+                                    stops: const [0, 1],
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            Positioned(
+                              bottom: -30,
+                              left: -18,
+                              child: Container(
+                                width: 98,
+                                height: 98,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(120),
+                                  gradient: RadialGradient(
+                                    colors: [
+                                      const Color(0xFF55D4FF).withOpacity(0.55),
+                                      Colors.transparent,
+                                    ],
+                                    stops: const [0, 1],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 22,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 18,
+                                      height: 18,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        gradient: const RadialGradient(
+                                          colors: [
+                                            Color(0xFF6FE7FF),
+                                            Color(0xFF1FA6FF),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: Text(
+                                        widget.message,
+                                        style: textTheme.bodyMedium?.copyWith(
+                                          color: Colors.white.withOpacity(0.95),
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.2,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
