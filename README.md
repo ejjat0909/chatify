@@ -137,6 +137,5 @@ dependencies:
 - Must be 11-12 digits after normalization
 - All special characters and spaces are removed
 
-## License
-
-This project is private and not published to pub.dev.
+<h3 align="left">Support me 💞️:</h3>
+<p><a href="https://www.buymeacoffee.com/ejjat"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="ejjat" /></a></p><br><br>
