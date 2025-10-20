@@ -51,7 +51,7 @@ class PhoneNumberCubit extends Cubit<PhoneNumberState> {
     }
   }
 
-  Future<void> launchWhatsApp() async {
+  Future<void> launchWhatsApp({String? message}) async {
     final normalized = state.phoneNumber?.normalized;
     if (normalized == null) {
       emit(
@@ -70,7 +70,7 @@ class PhoneNumberCubit extends Cubit<PhoneNumberState> {
       ),
     );
 
-    final result = await _launcher.launch(number: normalized);
+    final result = await _launcher.launch(number: normalized, message: message);
     result.when(
       success: () => emit(
         state.copyWith(status: PhoneNumberStatus.idle, launchError: null),

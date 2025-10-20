@@ -5,9 +5,13 @@ import '../domain/value_objects/launch_result.dart';
 
 class UrlLauncherWhatsAppLauncher implements WhatsAppLauncher {
   @override
-  Future<LaunchResult> launch({required String number}) async {
+  Future<LaunchResult> launch({required String number, String? message}) async {
     try {
-      final uri = Uri.parse('https://wa.me/$number');
+      final uri = message != null && message.isNotEmpty
+          ? Uri.parse(
+              'https://wa.me/$number?text=${Uri.encodeComponent(message)}',
+            )
+          : Uri.parse('https://wa.me/$number');
 
       final didLaunch = await launchUrl(
         uri,

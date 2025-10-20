@@ -1,5 +1,5 @@
 import '../value_objects/launch_result.dart';
 
 abstract class WhatsAppLauncher {
-  Future<LaunchResult> launch({required String number});
+  Future<LaunchResult> launch({required String number, String? message});
 }

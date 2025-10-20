@@ -6,11 +6,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../cubit/app_version_cubit.dart';
 import '../cubit/app_version_state.dart';
+import '../cubit/message_cubit.dart';
 import '../cubit/phone_number_cubit.dart';
 import '../cubit/phone_number_state.dart';
 import '../cubit/update_checker_cubit.dart';
 import '../cubit/update_checker_state.dart';
+import '../widgets/arrival_time_section.dart';
 import '../widgets/glass_snackbar.dart';
+import '../widgets/greeting_section.dart';
+import '../widgets/pre_filled_message_field.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   const PhoneNumberPage({super.key});
@@ -26,8 +30,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    // Load app version after frame
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await context.read<AppVersionCubit>().loadVersion();
+      if (!mounted) return;
+      try {
+        await context.read<AppVersionCubit>().loadVersion();
+      } catch (e) {
+        // Handle initialization errors silently
+      }
     });
   }
 
@@ -257,7 +267,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                     ),
                     child: GlassmorphicContainer(
                       width: size.width > 600 ? 520 : size.width * 0.92,
-                      height: size.height * 0.7,
+                      height: size.height * 0.8,
                       borderRadius: 34,
                       blur: 30,
                       border: 1.6,
@@ -320,263 +330,362 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 32,
-                              vertical: 36,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 18,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.12),
-                                    borderRadius: BorderRadius.circular(50),
-                                    border: Border.all(
-                                      color: Colors.white.withOpacity(0.2),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF9DF6FF),
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        'WhatsApp quick launch',
-                                        style: textTheme.labelLarge?.copyWith(
-                                          color: Colors.white.withOpacity(0.78),
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 26),
-                                Text(
-                                  'Create your WhatsApp link',
-                                  style: textTheme.headlineSmall?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0.2,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  'Drop in a Malaysian phone number and we\'ll launch WhatsApp in a snap — fluid, fast, and polished.',
-                                  style: textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white.withOpacity(0.72),
-                                    height: 1.5,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 36),
-                                BlocBuilder<PhoneNumberCubit, PhoneNumberState>(
-                                  builder: (context, state) {
-                                    return TextField(
-                                      controller: _controller,
-                                      keyboardType: TextInputType.phone,
-                                      style: textTheme.titleMedium?.copyWith(
-                                        color: Colors.white,
-                                      ),
-                                      cursorColor: Colors.white70,
-                                      decoration: InputDecoration(
-                                        labelText: 'Phone number',
-                                        labelStyle: TextStyle(
-                                          color: Colors.white.withOpacity(0.82),
-                                        ),
-                                        hintText: 'e.g. 013-456 7890',
-                                        hintStyle: TextStyle(
-                                          color: Colors.white.withOpacity(0.55),
-                                        ),
-                                        errorText: state.validationError,
-                                        filled: true,
-                                        fillColor: Colors.white.withOpacity(
-                                          0.12,
-                                        ),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                              horizontal: 22,
-                                              vertical: 20,
-                                            ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: Colors.white.withOpacity(
-                                              0.18,
-                                            ),
-                                          ),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: colorScheme.primary
-                                                .withOpacity(0.85),
-                                          ),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: colorScheme.error,
-                                          ),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: colorScheme.error,
-                                          ),
-                                        ),
-                                        suffixIcon: state.input.isNotEmpty
-                                            ? IconButton(
-                                                icon: const Icon(Icons.clear),
-                                                color: Colors.white,
-                                                onPressed: () {
-                                                  _controller.clear();
-                                                  context
-                                                      .read<PhoneNumberCubit>()
-                                                      .updateInput('');
-                                                },
-                                              )
-                                            : null,
-                                      ),
-                                      onChanged: context
-                                          .read<PhoneNumberCubit>()
-                                          .updateInput,
-                                    );
-                                  },
-                                ),
-                                const SizedBox(height: 22),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: OutlinedButton.icon(
-                                    style: OutlinedButton.styleFrom(
-                                      foregroundColor: Colors.white,
-                                      side: BorderSide(
-                                        color: Colors.white.withOpacity(0.4),
-                                      ),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Padding(
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 16,
-                                        horizontal: 16,
+                                        horizontal: 32,
+                                        vertical: 36,
                                       ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      final clipboardData =
-                                          await Clipboard.getData('text/plain');
-                                      final clipboardText =
-                                          clipboardData?.text?.trim() ?? '';
-                                      if (clipboardText.isEmpty) {
-                                        if (!mounted) return;
-                                        showGlassSnackbar(
-                                          context,
-                                          message: 'Clipboard is empty.',
-                                        );
-                                        return;
-                                      }
-
-                                      final validationError = context
-                                          .read<PhoneNumberCubit>()
-                                          .validateMalaysianNumber(
-                                            clipboardText,
-                                          );
-                                      if (validationError != null) {
-                                        if (!mounted) return;
-                                        showGlassSnackbar(
-                                          context,
-                                          message:
-                                              'Phone number from clipboard is invalid. Cannot paste',
-                                        );
-                                        return;
-                                      }
-
-                                      _controller.value = TextEditingValue(
-                                        text: clipboardText,
-                                        selection: TextSelection.collapsed(
-                                          offset: clipboardText.length,
-                                        ),
-                                      );
-                                      context
-                                          .read<PhoneNumberCubit>()
-                                          .updateInput(clipboardText);
-                                    },
-                                    icon: const Icon(Icons.paste_rounded),
-                                    label: const Text(
-                                      'Paste the number from clipboard',
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 18),
-                                BlocConsumer<
-                                  PhoneNumberCubit,
-                                  PhoneNumberState
-                                >(
-                                  listener: (context, state) {
-                                    if (state.launchError != null) {
-                                      showGlassSnackbar(
-                                        context,
-                                        message: state.launchError!,
-                                      );
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    if (state.status ==
-                                        PhoneNumberStatus.launchRequested) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                Colors.white,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          // Container(
+                                          //   padding:
+                                          //       const EdgeInsets.symmetric(
+                                          //         horizontal: 18,
+                                          //         vertical: 6,
+                                          //       ),
+                                          //   decoration: BoxDecoration(
+                                          //     color: Colors.white.withOpacity(
+                                          //       0.12,
+                                          //     ),
+                                          //     borderRadius:
+                                          //         BorderRadius.circular(50),
+                                          //     border: Border.all(
+                                          //       color: Colors.white
+                                          //           .withOpacity(0.2),
+                                          //     ),
+                                          //   ),
+                                          //   child: Row(
+                                          //     mainAxisAlignment:
+                                          //         MainAxisAlignment.center,
+                                          //     mainAxisSize: MainAxisSize.min,
+                                          //     children: [
+                                          //       Container(
+                                          //         width: 10,
+                                          //         height: 10,
+                                          //         decoration: BoxDecoration(
+                                          //           color: const Color(
+                                          //             0xFF9DF6FF,
+                                          //           ),
+                                          //           borderRadius:
+                                          //               BorderRadius.circular(
+                                          //                 10,
+                                          //               ),
+                                          //         ),
+                                          //       ),
+                                          //       const SizedBox(width: 10),
+                                          //       Text(
+                                          //         'WhatsApp quick launch',
+                                          //         style: textTheme.labelLarge
+                                          //             ?.copyWith(
+                                          //               color: Colors.white
+                                          //                   .withOpacity(
+                                          //                     0.78,
+                                          //                   ),
+                                          //               letterSpacing: 0.5,
+                                          //             ),
+                                          //       ),
+                                          //     ],
+                                          //   ),
+                                          // ),
+                                          // const SizedBox(height: 26),
+                                          Text(
+                                            'Create your WhatsApp link',
+                                            style: textTheme.headlineSmall
+                                                ?.copyWith(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.2,
+                                                ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            'Drop in a Malaysian phone number and we\'ll launch WhatsApp in a snap — fluid, fast, and polished.',
+                                            style: textTheme.bodyMedium
+                                                ?.copyWith(
+                                                  color: Colors.white
+                                                      .withOpacity(0.72),
+                                                  height: 1.5,
+                                                ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(height: 36),
+                                          BlocBuilder<
+                                            PhoneNumberCubit,
+                                            PhoneNumberState
+                                          >(
+                                            builder: (context, state) {
+                                              return TextField(
+                                                controller: _controller,
+                                                keyboardType:
+                                                    TextInputType.phone,
+                                                style: textTheme.titleMedium
+                                                    ?.copyWith(
+                                                      color: Colors.white,
+                                                    ),
+                                                cursorColor: Colors.white70,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Phone number',
+                                                  labelStyle: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.82),
+                                                  ),
+                                                  hintText: 'e.g. 013-456 7890',
+                                                  hintStyle: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.55),
+                                                  ),
+                                                  errorText:
+                                                      state.validationError,
+                                                  filled: true,
+                                                  fillColor: Colors.white
+                                                      .withOpacity(0.12),
+                                                  contentPadding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 22,
+                                                        vertical: 20,
+                                                      ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              20,
+                                                            ),
+                                                        borderSide: BorderSide(
+                                                          color: Colors.white
+                                                              .withOpacity(
+                                                                0.18,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              20,
+                                                            ),
+                                                        borderSide: BorderSide(
+                                                          color: colorScheme
+                                                              .primary
+                                                              .withOpacity(
+                                                                0.85,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                  errorBorder: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          20,
+                                                        ),
+                                                    borderSide: BorderSide(
+                                                      color: colorScheme.error,
+                                                    ),
+                                                  ),
+                                                  focusedErrorBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              20,
+                                                            ),
+                                                        borderSide: BorderSide(
+                                                          color:
+                                                              colorScheme.error,
+                                                        ),
+                                                      ),
+                                                  suffixIcon:
+                                                      state.input.isNotEmpty
+                                                      ? IconButton(
+                                                          icon: const Icon(
+                                                            Icons.clear,
+                                                          ),
+                                                          color: Colors.white,
+                                                          onPressed: () {
+                                                            _controller.clear();
+                                                            context
+                                                                .read<
+                                                                  PhoneNumberCubit
+                                                                >()
+                                                                .updateInput(
+                                                                  '',
+                                                                );
+                                                          },
+                                                        )
+                                                      : null,
+                                                ),
+                                                onChanged: context
+                                                    .read<PhoneNumberCubit>()
+                                                    .updateInput,
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(height: 22),
+                                          PreFilledMessageField(
+                                            colorScheme: colorScheme,
+                                            textTheme: textTheme,
+                                          ),
+                                          const SizedBox(height: 22),
+                                          GreetingSection(textTheme: textTheme),
+                                          const SizedBox(height: 22),
+                                          ArrivalTimeSection(
+                                            textTheme: textTheme,
+                                          ),
+                                          const SizedBox(height: 28),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: OutlinedButton.icon(
+                                              style: OutlinedButton.styleFrom(
+                                                foregroundColor: Colors.white,
+                                                side: BorderSide(
+                                                  color: Colors.white
+                                                      .withOpacity(0.4),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 16,
+                                                      horizontal: 16,
+                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
                                               ),
-                                        ),
-                                      );
-                                    }
+                                              onPressed: () async {
+                                                final clipboardData =
+                                                    await Clipboard.getData(
+                                                      'text/plain',
+                                                    );
+                                                final clipboardText =
+                                                    clipboardData?.text
+                                                        ?.trim() ??
+                                                    '';
+                                                if (clipboardText.isEmpty) {
+                                                  if (!mounted) return;
+                                                  showGlassSnackbar(
+                                                    context,
+                                                    message:
+                                                        'Clipboard is empty.',
+                                                  );
+                                                  return;
+                                                }
 
-                                    return _GlassLiquidButton(
-                                      enabled: state.isValid,
-                                      onPressed: state.isValid
-                                          ? () => context
-                                                .read<PhoneNumberCubit>()
-                                                .launchWhatsApp()
-                                          : null,
-                                      colorScheme: colorScheme,
-                                      textTheme: textTheme,
-                                    );
-                                  },
+                                                final validationError = context
+                                                    .read<PhoneNumberCubit>()
+                                                    .validateMalaysianNumber(
+                                                      clipboardText,
+                                                    );
+                                                if (validationError != null) {
+                                                  if (!mounted) return;
+                                                  showGlassSnackbar(
+                                                    context,
+                                                    message:
+                                                        'Phone number from clipboard is invalid. Cannot paste',
+                                                  );
+                                                  return;
+                                                }
+
+                                                _controller
+                                                    .value = TextEditingValue(
+                                                  text: clipboardText,
+                                                  selection:
+                                                      TextSelection.collapsed(
+                                                        offset: clipboardText
+                                                            .length,
+                                                      ),
+                                                );
+                                                context
+                                                    .read<PhoneNumberCubit>()
+                                                    .updateInput(clipboardText);
+                                              },
+                                              icon: const Icon(
+                                                Icons.paste_rounded,
+                                              ),
+                                              label: const Text(
+                                                'Paste the number from clipboard',
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 18),
+                                          BlocConsumer<
+                                            PhoneNumberCubit,
+                                            PhoneNumberState
+                                          >(
+                                            listener: (context, state) {
+                                              if (state.launchError != null) {
+                                                showGlassSnackbar(
+                                                  context,
+                                                  message: state.launchError!,
+                                                );
+                                              }
+                                            },
+                                            builder: (context, state) {
+                                              if (state.status ==
+                                                  PhoneNumberStatus
+                                                      .launchRequested) {
+                                                return const Center(
+                                                  child: CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                          Color
+                                                        >(Colors.white),
+                                                  ),
+                                                );
+                                              }
+
+                                              return _GlassLiquidButton(
+                                                enabled: state.isValid,
+                                                onPressed: state.isValid
+                                                    ? () {
+                                                        final message = context
+                                                            .read<
+                                                              MessageCubit
+                                                            >()
+                                                            .state
+                                                            .combinedMessage;
+                                                        context
+                                                            .read<
+                                                              PhoneNumberCubit
+                                                            >()
+                                                            .launchWhatsApp(
+                                                              message:
+                                                                  message
+                                                                      .isNotEmpty
+                                                                  ? message
+                                                                  : null,
+                                                            );
+                                                      }
+                                                    : null,
+                                                colorScheme: colorScheme,
+                                                textTheme: textTheme,
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(height: 18),
+                                          Text(
+                                            'Opening WhatsApp will happen outside of Chatify.',
+                                            style: textTheme.bodySmall
+                                                ?.copyWith(
+                                                  color: Colors.white
+                                                      .withOpacity(0.72),
+                                                ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 18),
-                                Text(
-                                  'Opening WhatsApp will happen outside of Chatify.',
-                                  style: textTheme.bodySmall?.copyWith(
-                                    color: Colors.white.withOpacity(0.72),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ],
@@ -585,7 +694,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   ),
                 ),
                 Positioned(
-                  bottom: 5.0,
+                  bottom: 0.0,
                   left: 0.0,
                   right: 0.0,
                   child: SafeArea(
