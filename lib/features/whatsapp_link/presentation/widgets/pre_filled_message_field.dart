@@ -24,6 +24,9 @@ class _PreFilledMessageFieldState extends State<PreFilledMessageField> {
   void initState() {
     super.initState();
     _messageController = TextEditingController();
+    _messageController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -50,6 +53,22 @@ class _PreFilledMessageFieldState extends State<PreFilledMessageField> {
           hintStyle: TextStyle(color: Colors.white.withOpacity(0.55)),
           filled: true,
           fillColor: Colors.white.withOpacity(0.12),
+          suffixIcon: ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _messageController,
+            builder: (context, value, child) {
+              return value.text.isEmpty
+                  ? const SizedBox.shrink()
+                  : IconButton(
+                      onPressed: () {
+                        _messageController.clear();
+                      },
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: Colors.white.withOpacity(0.55),
+                      ),
+                    );
+            },
+          ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 22,
             vertical: 20,

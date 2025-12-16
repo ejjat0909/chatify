@@ -535,86 +535,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                                             textTheme: textTheme,
                                           ),
                                           const SizedBox(height: 22),
+                                          _pasteNumberButton(context),
+                                          const SizedBox(height: 22),
                                           GreetingSection(textTheme: textTheme),
                                           const SizedBox(height: 22),
                                           ArrivalTimeSection(
                                             textTheme: textTheme,
                                           ),
-                                          const SizedBox(height: 28),
-                                          SizedBox(
-                                            width: double.infinity,
-                                            child: OutlinedButton.icon(
-                                              style: OutlinedButton.styleFrom(
-                                                foregroundColor: Colors.white,
-                                                side: BorderSide(
-                                                  color: Colors.white
-                                                      .withOpacity(0.4),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      vertical: 16,
-                                                      horizontal: 16,
-                                                    ),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                              ),
-                                              onPressed: () async {
-                                                final clipboardData =
-                                                    await Clipboard.getData(
-                                                      'text/plain',
-                                                    );
-                                                final clipboardText =
-                                                    clipboardData?.text
-                                                        ?.trim() ??
-                                                    '';
-                                                if (clipboardText.isEmpty) {
-                                                  if (!mounted) return;
-                                                  showGlassSnackbar(
-                                                    context,
-                                                    message:
-                                                        'Clipboard is empty.',
-                                                  );
-                                                  return;
-                                                }
-
-                                                final validationError = context
-                                                    .read<PhoneNumberCubit>()
-                                                    .validateMalaysianNumber(
-                                                      clipboardText,
-                                                    );
-                                                if (validationError != null) {
-                                                  if (!mounted) return;
-                                                  showGlassSnackbar(
-                                                    context,
-                                                    message:
-                                                        'Phone number from clipboard is invalid. Cannot paste',
-                                                  );
-                                                  return;
-                                                }
-
-                                                _controller
-                                                    .value = TextEditingValue(
-                                                  text: clipboardText,
-                                                  selection:
-                                                      TextSelection.collapsed(
-                                                        offset: clipboardText
-                                                            .length,
-                                                      ),
-                                                );
-                                                context
-                                                    .read<PhoneNumberCubit>()
-                                                    .updateInput(clipboardText);
-                                              },
-                                              icon: const Icon(
-                                                Icons.paste_rounded,
-                                              ),
-                                              label: const Text(
-                                                'Paste the number from clipboard',
-                                              ),
-                                            ),
-                                          ),
+                                          
                                           const SizedBox(height: 18),
                                           BlocConsumer<
                                             PhoneNumberCubit,
@@ -724,6 +652,83 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
         ),
       ),
     );
+  }
+
+  SizedBox _pasteNumberButton(BuildContext context) {
+    return SizedBox(
+                                          width: double.infinity,
+                                          child: OutlinedButton.icon(
+                                            style: OutlinedButton.styleFrom(
+                                              foregroundColor: Colors.white,
+                                              side: BorderSide(
+                                                color: Colors.white
+                                                    .withOpacity(0.4),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 16,
+                                                    horizontal: 16,
+                                                  ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              final clipboardData =
+                                                  await Clipboard.getData(
+                                                    'text/plain',
+                                                  );
+                                              final clipboardText =
+                                                  clipboardData?.text
+                                                      ?.trim() ??
+                                                  '';
+                                              if (clipboardText.isEmpty) {
+                                                if (!mounted) return;
+                                                showGlassSnackbar(
+                                                  context,
+                                                  message:
+                                                      'Clipboard is empty.',
+                                                );
+                                                return;
+                                              }
+
+                                              final validationError = context
+                                                  .read<PhoneNumberCubit>()
+                                                  .validateMalaysianNumber(
+                                                    clipboardText,
+                                                  );
+                                              if (validationError != null) {
+                                                if (!mounted) return;
+                                                showGlassSnackbar(
+                                                  context,
+                                                  message:
+                                                      'Phone number from clipboard is invalid. Cannot paste',
+                                                );
+                                                return;
+                                              }
+
+                                              _controller
+                                                  .value = TextEditingValue(
+                                                text: clipboardText,
+                                                selection:
+                                                    TextSelection.collapsed(
+                                                      offset: clipboardText
+                                                          .length,
+                                                    ),
+                                              );
+                                              context
+                                                  .read<PhoneNumberCubit>()
+                                                  .updateInput(clipboardText);
+                                            },
+                                            icon: const Icon(
+                                              Icons.paste_rounded,
+                                            ),
+                                            label: const Text(
+                                              'Paste the number from clipboard',
+                                            ),
+                                          ),
+                                        );
   }
 }
 
