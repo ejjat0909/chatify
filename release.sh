@@ -14,20 +14,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Create apk directory if it doesn't exist
-mkdir -p apk
-
-# Source APK location
-SOURCE_APK="build/app/outputs/flutter-apk/app-release.apk"
+# APK output directory
+APK_DIR="build/app/outputs/flutter-apk"
+SOURCE_APK="$APK_DIR/app-release.apk"
 
 # Copy APK with generic name
-cp "$SOURCE_APK" "apk/chatify.apk"
-echo "✓ Created apk/chatify.apk"
+cp "$SOURCE_APK" "$APK_DIR/chatify.apk"
+echo "✓ Created $APK_DIR/chatify.apk"
 
 # Copy APK with version name
-cp "$SOURCE_APK" "apk/chatify_${VERSION}.apk"
-echo "✓ Created apk/chatify_${VERSION}.apk"
+cp "$SOURCE_APK" "$APK_DIR/chatify_${VERSION}.apk"
+echo "✓ Created $APK_DIR/chatify_${VERSION}.apk"
 
 echo ""
 echo "Release build completed successfully!"
-echo "APK files are located in the 'apk' directory"
+echo "APK files are located in '$APK_DIR'"
