@@ -60,7 +60,9 @@ class _PreFilledMessageFieldState extends State<PreFilledMessageField> {
                   ? const SizedBox.shrink()
                   : IconButton(
                       onPressed: () {
-                        _messageController.clear();
+                        //  _messageController.clear();
+                        // Clear arrival message from state, keeping greeting
+                        context.read<MessageCubit>().clearArrivalMessage();
                       },
                       icon: Icon(
                         Icons.close_rounded,

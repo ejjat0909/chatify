@@ -45,13 +45,9 @@ class _GreetingSectionState extends State<GreetingSection> {
         const SizedBox(height: 12),
         BlocBuilder<MessageCubit, MessageState>(
           builder: (context, state) {
-            // Initialize with default greeting if empty
-            final greetingText = state.greetingMessage.isEmpty
-                ? 'Lalamove here'
-                : state.greetingMessage;
             // Sync controller with bloc state
-            if (_greetingController.text != greetingText) {
-              _greetingController.text = greetingText;
+            if (_greetingController.text != state.greetingMessage) {
+              _greetingController.text = state.greetingMessage;
             }
             return _GreetingButton(
               controller: _greetingController,
@@ -124,12 +120,9 @@ class _GreetingButtonState extends State<_GreetingButton> {
         final savedGreeting = state.greetingMessage;
         return GestureDetector(
           onTapDown: (_) => setState(() => _isPressed = true),
-          onTapUp: (_) async {
+          onTapUp: (_) {
             setState(() => _isPressed = false);
-            // Pre-fill the greeting message when button is pressed
-            await context.read<MessageCubit>().updateGreetingMessage(
-              savedGreeting.isNotEmpty ? savedGreeting : 'Lalamove here',
-            );
+            _toggleEditMode();
           },
           onTapCancel: () => setState(() => _isPressed = false),
           child: AnimatedScale(

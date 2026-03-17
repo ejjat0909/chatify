@@ -11,7 +11,6 @@ class MessageCubit extends Cubit<MessageState> {
 
   static const String _greetingKey = 'greeting_message';
   static const String _arrivalKey = 'arrival_message';
-  static const String _defaultGreeting = 'Lalamove here';
 
   /// Initialize by loading messages from shared preferences
   Future<void> initialize() async {
@@ -19,16 +18,10 @@ class MessageCubit extends Cubit<MessageState> {
       final prefs = _prefs ?? await SharedPreferences.getInstance();
 
       // Load greeting message
-      String greetingMessage = prefs.getString(_greetingKey) ?? '';
-
-      // If not found, set default and save
-      if (greetingMessage.isEmpty) {
-        await prefs.setString(_greetingKey, _defaultGreeting);
-        greetingMessage = _defaultGreeting;
-      }
+      final greetingMessage = prefs.getString(_greetingKey) ?? '';
 
       // Load arrival message
-      String arrivalMessage = prefs.getString(_arrivalKey) ?? '';
+      final arrivalMessage = prefs.getString(_arrivalKey) ?? '';
 
       emit(
         MessageState(
@@ -37,8 +30,8 @@ class MessageCubit extends Cubit<MessageState> {
         ),
       );
     } catch (e) {
-      // Fallback to default state
-      emit(MessageState(greetingMessage: _defaultGreeting));
+      // Fallback to empty state
+      emit(MessageState.initial());
     }
   }
 
